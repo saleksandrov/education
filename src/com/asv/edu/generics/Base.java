@@ -2,11 +2,11 @@ package com.asv.edu.generics;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by alexandrov on 24.03.2016.
+ *
+ * @author alexandrov on 24.03.2016.
  */
 public class Base {
 
@@ -26,12 +26,17 @@ public class Base {
         int countWithWildcard = api.countWithWildcard(vehicles);
         int countWithWildcard2 = api.countWithWildcard(cars);
         int countVehicles = api.count(vehicles);
+        int countVehiclesWithBounded = api.countWithBoundedType(vehicles);
+        int countCarsWithBounded = api.countWithBoundedType(cars);
+
         // cannot compile
         //int countCars = api.count(cars);
 
         System.out.println("countWithWildcard = " + countWithWildcard);
-        System.out.println("countWithWildcard2 = " + countWithWildcard2);
+        System.out.println("countWithBoundedType = " + countWithWildcard2);
         System.out.println("countVehicles = " + countVehicles);
+        System.out.println("countVehiclesWithBounded = " + countVehiclesWithBounded);
+        System.out.println("countCarsWithBounded = " + countCarsWithBounded);
 
     }
 
@@ -39,9 +44,9 @@ public class Base {
 
 class MyAPI<T> {
 
-    private T vehicle;
+    //private T vehicle;
 
-    public int countWithWildcard(Collection<? extends T> vehicles) {
+    int countWithWildcard(Collection<? extends T> vehicles) {
         int count = 0;
         for (T vehicle : vehicles) {
             count++;
@@ -49,15 +54,28 @@ class MyAPI<T> {
         return count;
     }
 
-    public int count(Collection<T> vehicles) {
+    @SuppressWarnings("TypeParameterHidesVisibleType")
+    <T extends Vehicle> int countWithBoundedType(Collection<T> vehicles) {
+        int count = 0;
+        for (Vehicle vehicle : vehicles) {
+            count++;
+        }
+        return count;
+    }
+
+    @SuppressWarnings("TypeParameterHidesVisibleType")
+    <T extends Vehicle> void inspect(T t){
+        //System.out.println("T: " + t.getClass().getName());
+        //System.out.println("U: " + u.getClass().getName());
+    }
+
+    int count(Collection<T> vehicles) {
         int count = 0;
         for (T vehicle : vehicles) {
             count++;
         }
         return count;
     }
-
-
 
 }
 
