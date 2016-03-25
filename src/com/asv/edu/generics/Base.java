@@ -1,8 +1,7 @@
 package com.asv.edu.generics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  *
@@ -34,6 +33,13 @@ public class Base {
 
         // cannot do that
         //List<Boat> boats = new ArrayList<Vehicle>();
+
+        // But it is possible
+        Set<Number> box = new LinkedHashSet<>();
+        box.add(10);
+        box.add(10.1);
+        box.add(new BigDecimal("23.67"));
+
 
         System.out.println("countWithWildcard = " + countWithWildcard);
         System.out.println("countWithBoundedType = " + countWithWildcard2);
