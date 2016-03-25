@@ -12,17 +12,17 @@ public class Base {
 
     public static void main(String[] args) {
 
-        List<Vehicle> vehicles = new ArrayList<Vehicle>();
+        List<Vehicle> vehicles = new ArrayList<>();
         vehicles.add(new Vehicle());
         vehicles.add(new Vehicle());
         vehicles.add(new Vehicle());
         vehicles.add(new Vehicle());
 
-        List<Car> cars = new ArrayList<Car>();
+        List<Car> cars = new ArrayList<>();
         cars.add(new Car());
         cars.add(new Car());
 
-        MyAPI<Vehicle> api = new MyAPI<Vehicle>();
+        MyAPI<Vehicle> api = new MyAPI<>();
         int countWithWildcard = api.countWithWildcard(vehicles);
         int countWithWildcard2 = api.countWithWildcard(cars);
         int countVehicles = api.count(vehicles);
