@@ -32,6 +32,9 @@ public class Base {
         // cannot compile
         //int countCars = api.count(cars);
 
+        // cannot do that
+        //List<Boat> boats = new ArrayList<Vehicle>();
+
         System.out.println("countWithWildcard = " + countWithWildcard);
         System.out.println("countWithBoundedType = " + countWithWildcard2);
         System.out.println("countVehicles = " + countVehicles);
