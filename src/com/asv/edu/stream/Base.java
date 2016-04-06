@@ -22,14 +22,11 @@ public class Base {
         }
 
         long startTime = System.currentTimeMillis();
-        long sum = getSumFromStream(calls);
-        //long sum = getSumFromLoop(calls);
-        System.out.println(sum);
+        //long sum = getSumFromStream(calls);
+        long sum = getSumFromLoop(calls);
         long endTime = System.currentTimeMillis();
+        System.out.println(sum);
         System.out.println("(endTime - startTime) = " + (endTime - startTime));
-
-
-
     }
 
     private static long getSumFromStream(List<Integer> calls) {
