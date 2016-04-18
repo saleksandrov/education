@@ -15,11 +15,12 @@ public class Base {
     static final BiConsumer<int[], int[]> forkJoinFunction = (x, y) -> Sort.forkJoinSort(x, y, 0, x.length - 1);
     static final BiConsumer<int[], int[]> mergeSortClassicFunction = (x, y) -> Sort.merge_sort(x,y,0,x.length -1);
     static final BiConsumer<int[], int[]> arraysSortNativeFunction = (x, y)  ->  Arrays.sort(x);
+    static final BiConsumer<int[], int[]> arraysSortParallelNativeFunction = (x, y)  ->  Arrays.parallelSort(x);
 
     // Configuration part
     static final int EXPERIMENT_COUNT = 1;
     static final int LENGTH_OF_ARRAY = 100_000_000;
-    static final BiConsumer<int[], int[]> sortFunction = arraysSortNativeFunction;
+    static final BiConsumer<int[], int[]> sortFunction = arraysSortParallelNativeFunction;
 
     public static void main(String[] args) {
 
