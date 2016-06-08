@@ -19,12 +19,14 @@ public class MultiThreadMediator implements Mediator {
     }
 
     public void sendEvent(Event event) {
-        Iterator<MediatorTask> it = tasks.iterator();
+
         tasks.stream().forEach((mediatorTask) -> es.execute(
                 () -> mediatorTask.handleEvent(event))
         );
 
-        /*while (it.hasNext()) {
+        /* Old Code
+        Iterator<MediatorTask> it = tasks.iterator();
+        while (it.hasNext()) {
             MediatorTask mediatorTask = it.next();
             es.execute(new Runnable() {
                 @Override
@@ -32,7 +34,8 @@ public class MultiThreadMediator implements Mediator {
                     mediatorTask.handleEvent(event);
                 }
             });
-        } */
+        }
+        */
     }
 
     public void stop() {
