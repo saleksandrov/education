@@ -24,8 +24,9 @@ public class Base {
 
         printlnConsumer.accept(modify1(data).toString());
 
-        //printlnConsumer.accept(String.valueOf(generateParallel()));
-        printlnConsumer.accept(String.valueOf(generate()));
+        startAdminThread();
+        printlnConsumer.accept(String.valueOf(generateParallel()));
+        //printlnConsumer.accept(String.valueOf(generate()));
     }
 
     public static List<Integer> modify1(List<String> data) {
@@ -42,6 +43,22 @@ public class Base {
         // потребляет гораздо меньше ОЗУ и процессорного времение чем параллельная версия
         IntStream intStream = IntStream.range(0, 2_000_000_000).filter(x -> x % 2 == 0);
         return intStream.toArray().length;
+    }
+
+    public static void startAdminThread() {
+        Thread adminThread = new Thread(() -> {
+            int count = 3;
+            try {
+                while (--count >= 0) {
+                    int ac = Thread.activeCount();
+                    System.out.println("activeCount = " + ac);
+                    Thread.sleep(2000);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        adminThread.start();
     }
 
 
