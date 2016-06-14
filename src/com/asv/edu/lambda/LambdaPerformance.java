@@ -11,7 +11,7 @@ import java.util.List;
 public class LambdaPerformance {
 
     public static void main(String[] args) {
-        int count = 50_000_000;
+        int count = 20_000_000;
 
         List<Integer> etalonList = new ArrayList<>(count);
         while (count-- > 0) {
@@ -21,8 +21,8 @@ public class LambdaPerformance {
         PerformEstimator.startEstimation();
 
         //iterateList(etalonList);
-        iterateListByLambdaSecond(etalonList);
-        //iterateListSecond(etalonList);
+        //iterateListByLambdaSecond(etalonList);
+        iterateListSecond(etalonList);
 
         System.out.println("PerformEstimator.getEstimationInMillis() = " + PerformEstimator.getEstimationInMillis());
     }
@@ -52,11 +52,11 @@ public class LambdaPerformance {
     }
 
     /**
-     * Эта операция выполняется с аналогичной производительностью что и с использованием for-each
+     * Эта операция выполняется с аналогичной производительностью что и с использованием for-each или чуть быстрее
      *
      */
     public static void iterateListByLambdaSecond(List<Integer> data) {
-        data.stream().forEach(x -> doIt(x));
+        data.stream().forEach(LambdaPerformance::doIt);
     }
 
     private static void doIt(Integer i) {
