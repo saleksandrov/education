@@ -11,17 +11,18 @@ import java.util.List;
 public class LambdaPerformance {
 
     public static void main(String[] args) {
-        int count = 1_000_000;
+        int count = 50_000_000;
 
-        List<Integer> etalonList = new ArrayList<>();
+        List<Integer> etalonList = new ArrayList<>(count);
         while (count-- > 0) {
             etalonList.add(count);
         }
 
         PerformEstimator.startEstimation();
 
-        iterateList(etalonList);
-        //iterateListByLambda(etalonList);
+        //iterateList(etalonList);
+        iterateListByLambdaSecond(etalonList);
+        //iterateListSecond(etalonList);
 
         System.out.println("PerformEstimator.getEstimationInMillis() = " + PerformEstimator.getEstimationInMillis());
     }
@@ -34,14 +35,32 @@ public class LambdaPerformance {
         System.out.println("count = " + count);
     }
 
+    public static void iterateListSecond(List<Integer> data) {
+        for (Integer obj: data) {
+            doIt(obj);
+        }
+    }
+
     /**
-     * Производительность итераций по Stream намного ниже обычного foreach
+     * Производительность этой итераций по Stream намного ниже обычного foreach
      *
      */
     public static void iterateListByLambda(List<?> data) {
         int count = 0;
         long count1 = data.stream().count();
         System.out.println("count1 = " + count1);
+    }
+
+    /**
+     * Эта операция выполняется с аналогичной производительностью что и с использованием for-each
+     *
+     */
+    public static void iterateListByLambdaSecond(List<Integer> data) {
+        data.stream().forEach(x -> doIt(x));
+    }
+
+    private static void doIt(Integer i) {
+        i *= 2;
     }
 
 }
