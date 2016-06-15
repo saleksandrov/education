@@ -38,6 +38,11 @@ public class PerformEstimator {
         return - 1;
     }
 
+    public static void printEstimationInMillis() {
+        long time = getEstimationInMillis();
+        System.out.println(String.format("[PERFORMANCE METRIC] Work time is %d milliseconds", time));
+    }
+
     public static void main(String[] args) {
         Deque<Long> queue = new ConcurrentLinkedDeque<>();
         queue.add(1L);
