@@ -4,6 +4,7 @@ import com.asv.util.PerformEstimator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by work on 12.06.2016.
@@ -22,7 +23,9 @@ public class LambdaPerformance {
 
         //iterateList(etalonList);
         //iterateListByLambdaSecond(etalonList);
-        iterateListSecond(etalonList);
+        //iterateListSecond(etalonList);
+        //iterateListThird(etalonList);
+        iterateListByLambdaThird(etalonList);
 
         System.out.println("PerformEstimator.getEstimationInMillis() = " + PerformEstimator.getEstimationInMillis());
     }
@@ -41,6 +44,16 @@ public class LambdaPerformance {
         }
     }
 
+    public static void iterateListThird(List<Integer> data) {
+        List<Integer> result = new ArrayList<>();
+        for (Integer obj: data) {
+            if (obj % 2 == 0) {
+                result.add(obj);
+            }
+        }
+        System.out.println(result.size());
+    }
+
     /**
      * Производительность этой итераций по Stream намного ниже обычного foreach
      *
@@ -57,6 +70,16 @@ public class LambdaPerformance {
      */
     public static void iterateListByLambdaSecond(List<Integer> data) {
         data.stream().forEach(LambdaPerformance::doIt);
+    }
+
+    /**
+     * Эта операция выполняется немного медленнее чем аналогичная в цикле for-each
+     *
+     * @param data
+     */
+    public static void iterateListByLambdaThird(List<Integer> data) {
+        List<Integer> result = data.stream().filter(x -> x % 2 == 0).collect(Collectors.toList());
+        System.out.println(result.size());
     }
 
     private static void doIt(Integer i) {
