@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
  */
 public class LambdaPerformanceSpecialCase {
 
+    static long count = 0;
+
     public static void main(String[] args) {
         int count = 100_000;
 
@@ -25,7 +27,7 @@ public class LambdaPerformanceSpecialCase {
 
         List<Integer> subList = new ArrayList<>(count2);
         while (count2-- > 0) {
-            subList.add(count2+3_000);
+            subList.add(count2+15_056);
         }
 
         System.out.println("Start work");
@@ -33,7 +35,7 @@ public class LambdaPerformanceSpecialCase {
         System.out.println("subList.size() = " + subList.size());
 
         PerformEstimator.startEstimation();
-        case2(etalonList, subList);
+        case1(etalonList, subList);
         PerformEstimator.printEstimationInMillis();
     }
 
@@ -45,10 +47,12 @@ public class LambdaPerformanceSpecialCase {
      * @param subList
      */
     public static void case1(List<Integer> etalonList, List<Integer> subList) {
-        Predicate<Integer> hasElem = c -> etalonList.stream().anyMatch(u -> u.equals(c));
+        //Predicate<Integer> hasElem = c -> etalonList.stream().anyMatch(u -> u.equals(c));
+        Predicate<Integer> hasElem = c -> etalonList.stream().anyMatch(u -> equals(u,c));
 
         List<Integer> res = subList.stream().filter(hasElem).collect(Collectors.toList());
         System.out.println(res.size());
+        System.out.println("Count = " + count);
     }
 
     /**
@@ -64,4 +68,15 @@ public class LambdaPerformanceSpecialCase {
         System.out.println(res.size());
     }
 
+    /**
+     * Технический метод. Используется для подсчета количества итераций в алогитме.
+     *
+     * @param u
+     * @param c
+     * @return
+     */
+    public static boolean equals(Integer u, Integer c) {
+        count++;
+        return u.equals(c);
+    }
 }
