@@ -1,6 +1,5 @@
 package com.asv.edu.multithread;
 
-import com.sun.xml.internal.ws.api.server.ThreadLocalContainerResolver;
 
 /**
  * Created by work on 26.06.2016.

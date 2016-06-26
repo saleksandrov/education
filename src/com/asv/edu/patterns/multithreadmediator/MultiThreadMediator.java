@@ -1,7 +1,6 @@
 package com.asv.edu.patterns.multithreadmediator;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
