@@ -3,6 +3,7 @@ package com.asv.edu.lambda;
 import com.asv.util.PerformEstimator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -34,19 +35,17 @@ public class PrimitiveStream {
 
     private static void testIntStream() {
         int count = 100_000_000;
+        PerformEstimator.startEstimation();
+
+        // This code is much more faster (include array construction loop) than lambda
         int[] intArray = new int[count];
         while (--count >= 0) {
             intArray[count] = count;
         }
-
-        PerformEstimator.startEstimation();
-
-        // This code is more performant than lambda
-/*
         long sum = 0;
         int min = 0;
         int max = 0;
-        double average = 0.0;
+        int countStat = 0;
         for (int d : intArray) {
             sum += d;
             if (min > d) {
@@ -55,21 +54,23 @@ public class PrimitiveStream {
             if (max < d) {
                 max = d;
             }
+            count++;
         }
-        average = sum/intArray.length;
+        double average = sum/intArray.length;
         System.out.println("Max = " + max);
         System.out.println("Min = " + min);
         System.out.println("Average = " + average);
         System.out.println("Sum = " + sum);
-*/
 
+        PerformEstimator.printEstimationInMillis();
 
-        IntSummaryStatistics intSummaryStatistics = IntStream.of(intArray).summaryStatistics();
+        PerformEstimator.startEstimation();
+
+        IntSummaryStatistics intSummaryStatistics = Arrays.stream(intArray).summaryStatistics();
         System.out.println("intStream.getMax = " + intSummaryStatistics.getMax());
         System.out.println("intStream.getMin = " + intSummaryStatistics.getMin());
         System.out.println("intStream.getAverage = " + intSummaryStatistics.getAverage());
         System.out.println("intStream.getSum = " + intSummaryStatistics.getSum());
-
 
         PerformEstimator.printEstimationInMillis();
     }
