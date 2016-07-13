@@ -42,6 +42,8 @@ public class PrimitiveStream {
         while (--count >= 0) {
             intArray[count] = count;
         }
+        // This code works slowly that simple loop
+        //Arrays.setAll(intArray, i -> i);
         long sum = 0;
         int min = 0;
         int max = 0;
@@ -54,7 +56,7 @@ public class PrimitiveStream {
             if (max < d) {
                 max = d;
             }
-            count++;
+            countStat++;
         }
         double average = sum/intArray.length;
         System.out.println("Max = " + max);
