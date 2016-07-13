@@ -20,10 +20,8 @@ import static java.util.stream.Collectors.toCollection;
 public class Square {
 
     public static void main(String[] args) {
-        //Stream<Integer> integerStream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        //LinkedList<Integer> linkedList = integerStream.collect(toCollection(LinkedList<Integer>::new));
 
-        LinkedList<Integer> linkedList = new LinkedList<Integer>();
+        LinkedList<Integer> linkedList = new LinkedList<>();
         int count = 1_000_000;
         while (--count > 0) {
             linkedList.add(count);
