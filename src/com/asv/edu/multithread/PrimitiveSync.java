@@ -86,7 +86,15 @@ public class PrimitiveSync {
 
         @Override
         public long increment() {
-            return value.incrementAndGet();
+            // variant 1
+            long v;
+            do {
+                v = value.get();
+            } while (!value.compareAndSet(v, v + 1));
+            return v + 1;
+
+            // variant 2
+            //return value.incrementAndGet();
         }
     }
 
