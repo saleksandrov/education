@@ -26,7 +26,9 @@
 package com.asv.benchmark;
 
 import com.asv.benchmark.cache.FastCache;
+import com.asv.benchmark.cache.SynchronizedCache;
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -40,45 +42,38 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @BenchmarkMode(Mode.Throughput)
 @State(Scope.Benchmark)
-public class MyBenchmark {
+//@OutputTimeUnit(TimeUnit.SECONDS)
+public class SimpleBenchmark {
 
-    static Map<Integer, Integer> cache1 = Collections.synchronizedMap(new HashMap<>());
+    static SynchronizedCache<Integer, Integer> cache1 = new SynchronizedCache<>();
     static FastCache<Integer, Integer> cache2 = new FastCache<>();
-    static Map<Integer, Integer> cache3 = new ConcurrentHashMap<>();
 
+    @Setup
     public static void setup() {
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i <= 10000; i++) {
             cache1.put(i, i);
             cache2.put(i, i);
-            cache3.put(i, i);
         }
     }
 
     @Benchmark
-    public void testReadWriteLockGet() {
+    public void testReadWriteLockGet(Blackhole bh) {
         int toGet = ThreadLocalRandom.current().nextInt(10);
-        Integer integer = cache2.get(toGet);
+        Integer integer = cache2.get(toGet, 5_000);
+        bh.consume(integer);
     }
 
     @Benchmark
-    public void testSynchMapGet() {
+    public void testSynchMapGet(Blackhole bh) {
         int toGet = ThreadLocalRandom.current().nextInt(10);
-        Integer integer = cache1.get(toGet);
+        Integer integer = cache1.get(toGet, 5_000);
+        bh.consume(integer);
     }
-
-    @Benchmark
-    public void testConcurrentMapGet() {
-        int toGet = ThreadLocalRandom.current().nextInt(10);
-        Integer integer = cache3.get(toGet);
-    }
-
 
     public static void main(String[] args) throws RunnerException {
 
-        setup();
-
         Options options = new OptionsBuilder()
-                .include(MyBenchmark.class.getSimpleName())
+                .include(SimpleBenchmark.class.getSimpleName())
                 .forks(1)
                 .threads(4)
                 .shouldFailOnError(true)

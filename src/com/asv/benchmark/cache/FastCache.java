@@ -13,7 +13,7 @@ public class FastCache<K, V> {
 
     private Map<K, V> cache = new HashMap<>();
 
-    ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    ReadWriteLock lock = new ReentrantReadWriteLock();
     Lock rLock = lock.readLock();
     Lock wLock = lock.writeLock();
 
@@ -35,6 +35,20 @@ public class FastCache<K, V> {
         //Lock readLock = this.lock.readLock();
         rLock.lock();
         try {
+            return cache.get(key);
+        } finally {
+            rLock.unlock();
+        }
+    }
+
+    public V get(K key, V value) {
+        //Lock readLock = this.lock.readLock();
+        rLock.lock();
+        try {
+            if (!cache.containsKey(key)) {
+                put(key, value);
+                return value;
+            }
             return cache.get(key);
         } finally {
             rLock.unlock();
