@@ -2,51 +2,52 @@ package com.asv.benchmark.cache;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by SBT-Aleksandrov-SV on 16.03.2017.
+ * Created by SBT-Aleksandrov-SV on 17.03.2017.
  */
-public class FastCache<K, V> {
+public class ReenterantLockCache <K, V> {
 
     private Map<K, V> cache = new HashMap<>();
 
-    ReadWriteLock lock = new ReentrantReadWriteLock();
-    Lock rLock = lock.readLock();
-    Lock wLock = lock.writeLock();
-
+    ReentrantLock lock = new ReentrantLock();
 
     public void put(K key, V value) {
-        wLock.lock();
+
+        lock.lock();
         try {
             cache.put(key, value);
         } finally {
-            wLock.unlock();
+            lock.unlock();
         }
     }
 
     public V get(K key) {
-        rLock.lock();
+
+        lock.lock();
         try {
             return cache.get(key);
         } finally {
-            rLock.unlock();
+            lock.unlock();
         }
     }
 
     public V get(K key, V value) {
-        rLock.lock();
+
+        lock.lock();
         try {
             if (!cache.containsKey(key)) {
-                put(key, value);
+                cache.put(key, value);
                 return value;
             }
             return cache.get(key);
         } finally {
-            rLock.unlock();
+            lock.unlock();
         }
     }
 
+    public static void main(String[] args) {
+
+    }
 }

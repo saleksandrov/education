@@ -26,6 +26,7 @@
 package com.asv.benchmark;
 
 import com.asv.benchmark.cache.FastCache;
+import com.asv.benchmark.cache.ReenterantLockCache;
 import com.asv.benchmark.cache.SynchronizedCache;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -58,14 +59,19 @@ public class SimpleBenchmark {
 
     @Benchmark
     public void testReadWriteLockGet(Blackhole bh) {
-        int toGet = ThreadLocalRandom.current().nextInt(10);
+        int toGet = ThreadLocalRandom.current().nextInt(100);
+        int toPut = ThreadLocalRandom.current().nextInt(50000);
+        cache2.put(toPut, toPut);
         Integer integer = cache2.get(toGet, 5_000);
         bh.consume(integer);
+
     }
 
     @Benchmark
     public void testSynchMapGet(Blackhole bh) {
-        int toGet = ThreadLocalRandom.current().nextInt(10);
+        int toGet = ThreadLocalRandom.current().nextInt(100);
+        int toPut = ThreadLocalRandom.current().nextInt(50000);
+        cache1.put(toPut, toPut);
         Integer integer = cache1.get(toGet, 5_000);
         bh.consume(integer);
     }
