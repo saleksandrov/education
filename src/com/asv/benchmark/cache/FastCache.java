@@ -36,6 +36,13 @@ public class FastCache<K, V> {
         }
     }
 
+    /**
+     * Fast implementation of cache
+     *
+     * @param key
+     * @param value
+     * @return
+     */
     public V get(K key, V value) {
         rLock.lock();
         try {
@@ -43,6 +50,38 @@ public class FastCache<K, V> {
                 put(key, value);
                 return value;
             }
+            return cache.get(key);
+        } finally {
+            rLock.unlock();
+        }
+    }
+
+    /**
+     * Etalon implementation of cache method
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public V getEtalon(K key, V value) {
+        rLock.lock();
+        if (!cache.containsKey(key)) {
+            rLock.unlock();
+            wLock.lock();
+            try {
+                if (!cache.containsKey(key)) {
+                    cache.put(key, value);
+                    return value;
+                } else {
+                    rLock.lock();
+                }
+            } finally {
+                wLock.unlock();
+            }
+            return value;
+        }
+
+        try {
             return cache.get(key);
         } finally {
             rLock.unlock();
