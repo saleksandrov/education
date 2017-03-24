@@ -78,7 +78,6 @@ public class FastCache<K, V> {
             } finally {
                 wLock.unlock();
             }
-            return value;
         }
 
         try {
