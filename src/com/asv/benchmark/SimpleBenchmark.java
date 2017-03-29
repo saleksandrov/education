@@ -80,7 +80,7 @@ public class SimpleBenchmark {
         int toGet = ThreadLocalRandom.current().nextInt(100);
         int toPut = ThreadLocalRandom.current().nextInt(50000);
         //cache1.put(toPut, toPut);
-        Integer integer = cache3.get(toGet, 5_000);
+        Integer integer = cache3.get2(toGet, 5_000);
         bh.consume(integer);
     }
 

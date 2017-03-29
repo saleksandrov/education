@@ -51,5 +51,48 @@ public class NewFastCache<K, V> {
         }
     }
 
+    public V get2(K key, V value) {
+
+        boolean wasWritten = false;
+
+        long stamp;
+        V v = null;
+        //OPTIMISTIC READ
+        if ((stamp = lock.tryOptimisticRead()) != 0L) { // optimistic
+            if (!cache.containsKey(key)) {
+                wasWritten = true;
+            }
+            else {
+
+                v = cache.get(key);
+                if (lock.validate(stamp))
+                    return v;
+
+            }
+        }
+        // READ PESSIMISTIC
+        if(!wasWritten) {
+            stamp = lock.readLock(); // fall back to read lock
+            try {
+                return cache.get(key);
+            } finally {
+                lock.unlockRead(stamp);
+            }
+        }//WRITE
+        else{
+
+            stamp = lock.writeLock();
+            try {
+                put(key, value);
+
+                return value;//cache.get(key);
+            } finally {
+                lock.unlockWrite(stamp);
+            }
+        }
+
+    }
+
+
 
 }
