@@ -26,7 +26,7 @@
 package com.asv.benchmark;
 
 import com.asv.benchmark.cache.FastCache;
-import com.asv.benchmark.cache.ReenterantLockCache;
+import com.asv.benchmark.cache.NewFastCache;
 import com.asv.benchmark.cache.SynchronizedCache;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -35,10 +35,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 @BenchmarkMode(Mode.Throughput)
@@ -48,12 +45,14 @@ public class SimpleBenchmark {
 
     static SynchronizedCache<Integer, Integer> cache1 = new SynchronizedCache<>();
     static FastCache<Integer, Integer> cache2 = new FastCache<>();
+    static NewFastCache<Integer, Integer> cache3 = new NewFastCache<>();
 
     @Setup
     public static void setup() {
         for (int i = 0; i <= 10000; i++) {
             cache1.put(i, i);
             cache2.put(i, i);
+            cache3.put(i, i);
         }
     }
 
@@ -61,7 +60,7 @@ public class SimpleBenchmark {
     public void testReadWriteLockGet(Blackhole bh) {
         int toGet = ThreadLocalRandom.current().nextInt(100);
         int toPut = ThreadLocalRandom.current().nextInt(50000);
-        cache2.put(toPut, toPut);
+        //cache2.put(toPut, toPut);
         Integer integer = cache2.get(toGet, 5_000);
         bh.consume(integer);
 
@@ -71,8 +70,17 @@ public class SimpleBenchmark {
     public void testSynchMapGet(Blackhole bh) {
         int toGet = ThreadLocalRandom.current().nextInt(100);
         int toPut = ThreadLocalRandom.current().nextInt(50000);
-        cache1.put(toPut, toPut);
+        //cache1.put(toPut, toPut);
         Integer integer = cache1.get(toGet, 5_000);
+        bh.consume(integer);
+    }
+
+    @Benchmark
+    public void testStampedLockGet(Blackhole bh) {
+        int toGet = ThreadLocalRandom.current().nextInt(100);
+        int toPut = ThreadLocalRandom.current().nextInt(50000);
+        //cache1.put(toPut, toPut);
+        Integer integer = cache3.get(toGet, 5_000);
         bh.consume(integer);
     }
 
