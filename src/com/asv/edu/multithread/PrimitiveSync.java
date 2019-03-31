@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,19 +18,16 @@ public class PrimitiveSync {
         final Counter counter = new CounterVolatile();
         AtomicInteger threadTerminated = new AtomicInteger(0);
 
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(new Random().nextInt(40));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                counter.increment();
-                counter.getValue();
-                threadTerminated.incrementAndGet();
-
+        Runnable task = () -> {
+            try {
+                Thread.sleep(new Random().nextInt(40));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            counter.increment();
+            counter.getValue();
+            threadTerminated.incrementAndGet();
+
         };
 
         int threadCount = 1000;
