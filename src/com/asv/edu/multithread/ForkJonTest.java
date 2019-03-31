@@ -8,6 +8,7 @@ import java.util.concurrent.RecursiveAction;
 
 public class ForkJonTest {
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         ForkJoinPool pool = ForkJoinPool.commonPool();
 
@@ -30,6 +31,7 @@ public class ForkJonTest {
                 System.out.println("element = " + data.poll() );
             }
         };
+
         pool.invoke(task1);
         pool.invoke(task2);
     }
